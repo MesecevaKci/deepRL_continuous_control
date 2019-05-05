@@ -32,6 +32,8 @@ I have obtained the solution to the problem by using the Deep Deterministic Poli
 
 The code which I used is based on the Udacity DDPG implementation applied to the OpenAI Gym's Pendulum environment available at this [link](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum). First, I have adopted the code for the Unity environment (in Continuous_Control.ipynb) and I have tuned the network architectures and the DDQN algorithm hyperparameters to achieve the goal of the agent learning: a reward of at least 30 averaged over the last 100 episodes.
 
+I have mostly worked with the first version of the environment (one agent) given that the second version is useful for algorithms like PPO, A3C, and D4PG that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience. 
+
 Initially, I have tried to reproduce the DDPG hyperparameters described in the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf) using the code as given by Udacity Pendulum application. I have also implemented suggestions from the class meant to stabilise the learning: 
 - 1. use gradient clipping when training the critic network implemented as following:
 ```
@@ -42,7 +44,6 @@ Initially, I have tried to reproduce the DDPG hyperparameters described in the [
 ```
 - 2. smaller number of updates per time step: instead of updating the actor and critic networks 20 times (for 20 agents) at every timestep, amend the code to update the networks 10 times after every 20 timesteps. 
 
-I have mostly worked with the first version of the environment (one agent) given that the second version is useful for algorithms like PPO, A3C, and D4PG that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience. 
 
 At the beginning the training of my agent was very slow and even after 500 episodes with 1000 steps for many of the experiments the reward averaged over the last 100 steps was still of the order below 10. Therefore I focussed on speeding up the learning process.
 In my case, I have found that the training speed and convergence improved by lowering the number of nodes in the network and batch normalising the networks layers following the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf).
@@ -54,22 +55,27 @@ The less frequent updates within a given episode (suggestion 2. fromt the Udacit
 
 ## Final set-up
 
+The final set-up is the solution for the "First Version" of the Reacher environment with one agent.  
+
 ### Actor and Critic Networks Architectures (code model.py)
 
  The final layer weights and biases of both the actor and critic were initialized from a uniform distribution [−3×10−3,3×10−3].  As described in the DDQN paper, the reason for this was to garantee that the initial outputs for the policy and value estimates are close to zero. The rest of the network layers were initialized from uniform distributions [−1√f,1√f] where f is the fan-in of the layer. The actions in the Critic network were included in the second hidden layer. 
 
- The actor (policy) network maps states to actions with the following structure:
+The actor (policy) network maps states to actions with the following structure:
+ ```
     State input: 33 units
     First hidden layer: 128 units with ReLU activation and batch normalization
     Second hidden layer: 128 units with ReLU activation and batch normalization
     Action output: 4 units with tanh activation
-
+```
+```
 The critic (value) network maps (state, action) pairs to Q-values with the following structure:
+```
     State input: 33 units
     First hidden layer: 128 nodes with ReLU activation and batch normalization
     Second hidden layer:  Action input 4 units + 128 units from the first hidden layer with ReLU activation 
     Q-value output: 1 node with ReLU activation
-
+```
 
 
 ### DDQN Hyperparameters (code ddqn_agent.py)
