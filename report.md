@@ -80,7 +80,7 @@ The critic (value) network maps (state, action) pairs to Q-values with the follo
 ```
 
 
-### DDQN Hyperparameters (code [ddqn_agent.py](ddqn_agent.py))
+### DDQN Hyperparameters (code [ddpg_agent.py](ddpg_agent.py))
 
 There were multiple hyperparameters which could be changed during the training process. In my experiments, lowering SIGMA in the Ornstein-Uhlenbeck process as well as decreasing the noise contribution over time by using the EPSILON and EPSILON_DECAY parameters had most influence on the convergence of the results. Maximum number of time steps per episode was set to 1000. 
 
