@@ -1,2 +1,2 @@
-# deepRL_continuous_control
-Project 2 of Udacity Deep Reinforcement Learning Nanodegree
+# Continuous Control
+## Project 2 of Udacity Deep Reinforcement Learning Nanodegree
