@@ -26,22 +26,20 @@ The environment is considered solved, when the average (over 100 episodes) of th
 
 ### Algorithm Description
 
-I have obtained the solution to the problem by using the Deep Deterministic Policy Gradients (DDPG) algorithm ([Lillicrap et al. 2016]( https://arxiv.org/pdf/1509.02971.pdf)). The algorithm is based on extending the Deep Q-Learning framework to the continuous action domain. The authors describe the DDPG as an actor-critic, model-free algorithm based on the deterministic policy gradient that can work in continuous action spaces. 
+I have obtained the solution to the problem by using the Deep Deterministic Policy Gradients (DDPG) algorithm ([Lillicrap et al. 2016]( https://arxiv.org/pdf/1509.02971.pdf)). The algorithm is based on extending the Deep Q-Learning framework to the continuous action domain. The authors describe the DDPG as an actor-critic, model-free algorithm based on the deterministic policy gradient that can work in continuous action spaces. The snapshot of the algorithm from the paper itself is shown below.
 
-
-ALGORITHM figure
-
+![alt text](DDPG_Algorithm.png)
 
 The code which I used is based on the Udacity DDPG implementation applied to the OpenAI Gym's Pendulum environment available at this [link](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum). First, I have adopted the code for the Unity environment (in Continuous_Control.ipynb) and I have tuned the network architectures and the DDQN algorithm hyperparameters to achieve the goal of the agent learning: a reward of at least 30 averaged over the last 100 episodes.
 
 Initially, I have tried to reproduce the DDPG hyperparameters described in the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf) using the code as given by Udacity Pendulum application. I have also implemented suggestions from the class meant to stabilise the learning: 
 - 1. use gradient clipping when training the critic network implemented as following:
-
+```
       self.critic_optimizer.zero_grad()
       critic_loss.backward()
       torch.nn.utils.clip_grad_norm(self.critic_local.parameters(), 1)
       self.critic_optimizer.step()
-
+```
 - 2. smaller number of updates per time step: instead of updating the actor and critic networks 20 times (for 20 agents) at every timestep, amend the code to update the networks 10 times after every 20 timesteps. 
 
 I have mostly worked with the first version of the environment (one agent) given that the second version is useful for algorithms like PPO, A3C, and D4PG that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience. 
@@ -78,7 +76,7 @@ The critic (value) network maps (state, action) pairs to Q-values with the follo
 
 There were multiple hyperparameters which could be changed during the training process. As mentioned before, I have found that lowering SIGMA in the Ornstein-Uhlenbeck process as well as decreasing the noise contribution over time as the agent gains more experience helps the convergence of the results. Maximum number of time steps per episode was set to 1000. 
 
-
+```
 BUFFER_SIZE = int(1e6)  # replay buffer size
 BATCH_SIZE = 128        # minibatch size
 GAMMA = 0.99            # discount factor
@@ -90,7 +88,7 @@ SIGMA = 0.1             # Ornstein-Uhlenbeck noise parameter
 THETA = 0.15            # Ornstein-Uhlenbeck noise parameter
 EPSILON = 1.0           # explore to exploit noise process added to act module
 EPSILON_DECAY = 1e-6    # decay rate for noise process
-
+```
 
 
 ### Results
@@ -109,6 +107,7 @@ This work should be extended in two different directions:
 
 
 ## References:
+1. This report is mainly based on the learning material of the [Udacity Deep Reinforcement Learning Nanodegree Program](https://eu.udacity.com/course/deep-reinforcement-learning-nanodegree--nd893) and references therein.
 2. Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf
 3. https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b
 4. https://sameera-lanka.com/blog/2018/2/19/deep-deterministic-policy-gradientpytorch-dm-control-suite
