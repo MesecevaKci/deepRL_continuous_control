@@ -37,20 +37,19 @@ The code which I used is based on the Udacity DDPG implementation applied to the
 Initially, I have tried to reproduce the DDPG hyperparameters described in the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf) using the code as given by Udacity Pendulum application. I have also implemented suggestions from the class meant to stabilise the learning: 
 - 1. use gradient clipping when training the critic network implemented as following:
 
-self.critic_optimizer.zero_grad()
-critic_loss.backward()
-torch.nn.utils.clip_grad_norm(self.critic_local.parameters(), 1)
-self.critic_optimizer.step()
+      self.critic_optimizer.zero_grad()
+      critic_loss.backward()
+      torch.nn.utils.clip_grad_norm(self.critic_local.parameters(), 1)
+      self.critic_optimizer.step()
 
 - 2. smaller number of updates per time step: instead of updating the actor and critic networks 20 times (for 20 agents) at every timestep, amend the code to update the networks 10 times after every 20 timesteps. 
 
 I have mostly worked with the first version of the environment (one agent) given that the second version is useful for algorithms like PPO, A3C, and D4PG that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience. 
 
-At the beginning the training of my agent was very slow and even after 500 episodes with 1000 steps for many of the experiments the reward averaged over the last 100 steps was still of the order below 10.  
-Therefore I focussed on speeding up the learning process.
-In my case, I have found that the training speed and convergence improved by lowering the number of nodes in the network and batch normalising the networks layers following the PAPER.
+At the beginning the training of my agent was very slow and even after 500 episodes with 1000 steps for many of the experiments the reward averaged over the last 100 steps was still of the order below 10. Therefore I focussed on speeding up the learning process.
+In my case, I have found that the training speed and convergence improved by lowering the number of nodes in the network and batch normalising the networks layers following the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf).
 
-On top of this, the greatest effect on speeding up the learning was to copy the weights from the local to the target network for both the actor and critic networks, respectively, in the initilisation step. Tuning of the noise parameters also had a lot of impact: supressing the level of exploration in the learning also sped up the learning process. Though the used Ornstein-Uhlenbeck noise explration process itself is constructed in such a way to decrease to mean ovet time (which was set by mu parameter to zero) the improvement was also achieved by using the additional decay parameters of the noise contribution. For this I have used the implementation as used in https://github.com/samlanka/DDPG-PyTorch.
+On top of this, a large effect on speeding up the learning was to copy the weights from the local to the target network for both the actor and critic networks, respectively, in the initilisation step (e.g. ). Tuning of the noise parameters also had a lot of impact: supressing the level of exploration in the learning also sped up the learning process. Though the used Ornstein-Uhlenbeck noise explration process itself is constructed in such a way to decrease to mean ovet time (which was set by mu parameter to zero) the improvement was also achieved by using the additional decay parameters of the noise contribution. For this I have used the implementation as used in https://github.com/samlanka/DDPG-PyTorch.
 
 The less frequent updates within a given episode (suggestion 2. fromt the Udacity class) was not really helpfull for my combination of parameters (environment with single agent) and I have dropped it - i.e. the update was carried out at each time step. 
 
