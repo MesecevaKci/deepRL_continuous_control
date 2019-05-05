@@ -68,7 +68,7 @@ The actor (policy) network maps states to actions with the following structure:
     Second hidden layer: 128 units with ReLU activation and batch normalization
     Action output: 4 units with tanh activation
 ```
-```
+
 The critic (value) network maps (state, action) pairs to Q-values with the following structure:
 ```
     State input: 33 units
