@@ -59,7 +59,7 @@ The less frequent updates within a given episode (the second suggestion from the
 
 The final set-up is the solution for the "First Version" of the Reacher environment with one agent.  
 
-### Actor and Critic Networks Architectures (code model.py)
+### Actor and Critic Networks Architectures (code [model.py](model.py))
 
  The final layer weights and biases of both the actor and critic were initialized from a uniform distribution [−3×10−3,3×10−3].  As described in the DDQN paper, the reason for this was to garantee that the initial outputs for the policy and value estimates are close to zero. The rest of the network layers were initialized from uniform distributions [−1√f,1√f] where f is the fan-in of the layer. The actions in the Critic network were included in the second hidden layer. 
 
@@ -80,7 +80,7 @@ The critic (value) network maps (state, action) pairs to Q-values with the follo
 ```
 
 
-### DDQN Hyperparameters (code ddqn_agent.py)
+### DDQN Hyperparameters (code [ddqn_agent.py](ddqn_agent.py))
 
 There were multiple hyperparameters which could be changed during the training process. In my experiments, lowering SIGMA in the Ornstein-Uhlenbeck process as well as decreasing the noise contribution over time by using the EPSILON and EPSILON_DECAY parameters had most influence on the convergence of the results. Maximum number of time steps per episode was set to 1000. 
 
