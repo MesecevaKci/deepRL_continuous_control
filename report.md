@@ -1,16 +1,16 @@
-Report
+# Report
 
-The goal of this project was to train an agent to solve the provided Unity Reacher https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher environment.
+The goal of this project was to train an agent to solve the provided [Unity Reacher] (https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher) environment.
 
 In this environment, a double-jointed arm can move to target locations. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
 
 The observation space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between -1 and 1.
 
 The goal is to solve one of the two versions of the environment.
-Option 1: Solve the First Version
+- Option 1: Solve the First Version
 
 The task is episodic, and in order to solve the environment, your agent must get an average score of +30 over 100 consecutive episodes.
-Option 2: Solve the Second Version
+- Option 2: Solve the Second Version
 
 The barrier for solving the second version of the environment is slightly different, to take into account the presence of many agents. In particular, your agents must get an average score of +30 (over 100 consecutive episodes, and over all agents). Specifically,
 
@@ -18,9 +18,9 @@ The barrier for solving the second version of the environment is slightly differ
     This yields an average score for each episode (where the average is over all 20 agents).
 
 
-Solution
+## Solution
 
-Algorithm Description
+### Algorithm Description
 
 I have obtained the solution to the problem by using the Deep Deterministic Policy Gradients (DDPG) algorithm (Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf). The algorithm is based on extending the Deep Q-Learning framework to the continuous action domain. The authors describe the DDPG as an actor-critic, model-free algorithm based on the deterministic policy gradient that can work in continuous action spaces. 
 
@@ -51,9 +51,9 @@ On top of this, the greatest effect on speeding up the learning was to copy the 
 The less frequent updates within a given episode (suggestion 2. fromt the Udacity class) was not really helpfull for my combination of parameters (environment with single agent) and I have dropped it - i.e. the update was carried out at each time step. 
 
 
-Final set-up
+## Final set-up
 
-Actor and Critic Networks Architectures (code model.py)
+### Actor and Critic Networks Architectures (code model.py)
 
  The final layer weights and biases of both the actor and critic were initialized from a uniform distribution [−3×10−3,3×10−3].  As described in the DDQN paper, the reason for this was to garantee that the initial outputs for the policy and value estimates are close to zero. The rest of the network layers were initialized from uniform distributions [−1√f,1√f] where f is the fan-in of the layer. The actions in the Critic network were included in the second hidden layer. 
 
@@ -71,7 +71,7 @@ The critic (value) network maps (state, action) pairs to Q-values with the follo
 
 
 
-DDQN Hyperparameters (code ddqn_agent.py)
+### DDQN Hyperparameters (code ddqn_agent.py)
 
 There were multiple hyperparameters which could be changed during the training process. As mentioned before, I have found that lowering SIGMA in the Ornstein-Uhlenbeck process as well as decreasing the noise contribution over time as the agent gains more experience helps the convergence of the results. Maximum number of time steps per episode was set to 1000. 
 
@@ -90,24 +90,23 @@ EPSILON_DECAY = 1e-6    # decay rate for noise process
 
 
 
-Results
+### Results
 
 Using the set-up described above the single Reacher agent was able to achieve the score of at least 30 over the last 100 episodes 
 at the episode 240. The plot showing the learning process is shown below (where the note on the figure itself refers to the episodes when the score of at least 30 was reached - 100). 
 
-FIGURE
+![alt text](ScoreFinal.png)
 
 
-Future work ideas
+### Future work ideas
 
 This work should be extended in two different directions:
 1. More systematic exploration of the hyperparameters - in this work I have found that lowering the degree of the exploitation helped to speed the learning. However, more systematic parameter tuninig would probably lead to the more optimal solution. 
 2. I have solved the environment with the DDPG algorithm. One should explore the other, more  actor-critic 
 
 
-References:
-Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf
-
-https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b
-https://sameera-lanka.com/blog/2018/2/19/deep-deterministic-policy-gradientpytorch-dm-control-suite
+## References:
+2. Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf
+3. https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b
+4. https://sameera-lanka.com/blog/2018/2/19/deep-deterministic-policy-gradientpytorch-dm-control-suite
 
