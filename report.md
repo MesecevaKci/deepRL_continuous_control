@@ -49,10 +49,10 @@ However, the learning of the agent was very slow and even with a further tweakin
 In my case, I have found that the training speed and convergence improved by:
 - lowering the number of nodes in the hidden network layers
 - batch normalising the networks layers - this was already used in the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf)
-- copying the weights from the local to the target network in the initilisation step for both the actor and critic networks, respectively      (e.g. https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b)
-- tuning the noise parameters by supressing the level of exploration in the learning process. Though the used Ornstein-Uhlenbeck noise exploration process itself is constructed in such a way to decrease to mean ovet time (which was set by the /mu parameter to zero) the improvement was also achieved by using the additional decay parameters of the noise contribution. For this I have used the implementation from the DDPG algorithm implementation in https://github.com/samlanka/DDPG-PyTorch.
+- copying the weights from the local to the target network in the initilisation step for both the actor and critic networks, respectively      (e.g.https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b)
+- tuning the noise parameters by supressing the level of exploration in the learning process. Though the used Ornstein-Uhlenbeck noise exploration process itself is constructed in such a way to decrease to mean over time (which was set by the \mu parameter to zero) the improvement was also achieved by using the additional decay parameters of the noise contribution. For the noise contribution decay I have used the implementation in the DDPG algorithm in https://github.com/samlanka/DDPG-PyTorch.
 
-The less frequent updates within a given episode (suggestion 2. fromt the Udacity class) was not really helpfull for my combination of parameters (environment with single agent) and I have dropped it - i.e. the update was carried out at each time step. 
+The less frequent updates within a given episode (the second suggestion from the Udacity team solution) was not really helpfull for my combination of parameters (environment with single agent) and I have dropped it - i.e. the update was carried out at each time step. 
 
 
 ## Final set-up
@@ -111,7 +111,7 @@ at the episode 240. The plot showing the learning process is shown below.
 
 This work should be extended in two different directions:
 1. More systematic exploration of the hyperparameters - in this work I have found that lowering the degree of the exploitation helped to speed the learning. However, more systematic parameter tuninig would probably lead to the more optimal solution. 
-2. I have solved the environment using the DDPG algorithm. This algorithm was introduced as using the "Actor-Critic" method, however, this algorithm can be also classified as a DQN method for continuous action spaces. One should solve the environemnt with another, more "native" actor-critic algorithm such as A3C Asynchronous Advantage Actor-Critic, A2C Advantage Actor-Critic or GAE Generalized Advantage Estimation.
+2. I have solved the environment using the DDPG algorithm. This algorithm was introduced as using the "Actor-Critic" method, however, this algorithm can be also classified as a DQN method for continuous action spaces. One should solve the environment with another, more "native" actor-critic algorithm such as A3C Asynchronous Advantage Actor-Critic, A2C Advantage Actor-Critic or GAE Generalized Advantage Estimation or with the PPO Proximal Policy Optimization method.
 
 
 ## References:
@@ -119,4 +119,5 @@ This work should be extended in two different directions:
 2. Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf
 3. https://towardsdatascience.com/deep-deterministic-policy-gradients-explained-2d94655a9b7b
 4. https://sameera-lanka.com/blog/2018/2/19/deep-deterministic-policy-gradientpytorch-dm-control-suite
+5. https://github.com/ShangtongZhang/DeepRL
 
