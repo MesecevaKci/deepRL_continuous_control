@@ -1,6 +1,8 @@
-# Report
+# Project Continuous Control: Report
 
-The goal of this project was to train an agent to solve the provided [Unity Reacher] (https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher) environment.
+## Goal
+
+The goal of this project was to train an agent to solve the provided [Unity Reacher](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#reacher) environment.
 
 In this environment, a double-jointed arm can move to target locations. A reward of +0.1 is provided for each step that the agent's hand is in the goal location. Thus, the goal of your agent is to maintain its position at the target location for as many time steps as possible.
 
@@ -14,31 +16,33 @@ The task is episodic, and in order to solve the environment, your agent must get
 
 The barrier for solving the second version of the environment is slightly different, to take into account the presence of many agents. In particular, your agents must get an average score of +30 (over 100 consecutive episodes, and over all agents). Specifically,
 
-    After each episode, we add up the rewards that each agent received (without discounting), to get a score for each agent. This yields 20 (potentially different) scores. We then take the average of these 20 scores.
-    This yields an average score for each episode (where the average is over all 20 agents).
+i) After each episode, we add up the rewards that each agent received (without discounting), to get a score for each agent. This yields 20 (potentially different) scores. We then take the average of these 20 scores.
 
+ii) This yields an average score for each episode (where the average is over all 20 agents).
+
+The environment is considered solved, when the average (over 100 episodes) of those average scores is at least +30. 
 
 ## Solution
 
 ### Algorithm Description
 
-I have obtained the solution to the problem by using the Deep Deterministic Policy Gradients (DDPG) algorithm (Lillicrap et al. 2016, https://arxiv.org/pdf/1509.02971.pdf). The algorithm is based on extending the Deep Q-Learning framework to the continuous action domain. The authors describe the DDPG as an actor-critic, model-free algorithm based on the deterministic policy gradient that can work in continuous action spaces. 
+I have obtained the solution to the problem by using the Deep Deterministic Policy Gradients (DDPG) algorithm ([Lillicrap et al. 2016]( https://arxiv.org/pdf/1509.02971.pdf)). The algorithm is based on extending the Deep Q-Learning framework to the continuous action domain. The authors describe the DDPG as an actor-critic, model-free algorithm based on the deterministic policy gradient that can work in continuous action spaces. 
 
 
 ALGORITHM figure
 
 
-The code which I used is based on the Udacity DDQN implementation applied to the OpenAI Gym's Pendulum environment available at https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum. First, I have adopted the code for the Unity environment (in .ipynb) and I have tuned the network architectures and the DDQN algorithm hyperparameters to achieve the goal of the agent learning: an average reward of at least 30 averaged over the last 100 episodes.
+The code which I used is based on the Udacity DDPG implementation applied to the OpenAI Gym's Pendulum environment available at this [link](https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum). First, I have adopted the code for the Unity environment (in Continuous_Control.ipynb) and I have tuned the network architectures and the DDQN algorithm hyperparameters to achieve the goal of the agent learning: a reward of at least 30 averaged over the last 100 episodes.
 
-Initially, I have tried to reproduce the DDQN hyperparameters described in the PAPER using the code as given by Udacity Pendulum application. I have also implemented suggestions from the class meant to stabilise the learning: 
-1. use gradient clipping when training the critic network implemented as following:
+Initially, I have tried to reproduce the DDPG hyperparameters described in the [DDPG paper](https://arxiv.org/pdf/1509.02971.pdf) using the code as given by Udacity Pendulum application. I have also implemented suggestions from the class meant to stabilise the learning: 
+- 1. use gradient clipping when training the critic network implemented as following:
 
 self.critic_optimizer.zero_grad()
 critic_loss.backward()
 torch.nn.utils.clip_grad_norm(self.critic_local.parameters(), 1)
 self.critic_optimizer.step()
 
-2. smaller number of updates per time step: instead of updating the actor and critic networks 20 times (for 20 agents) at every timestep, amend the code to update the networks 10 times after every 20 timesteps. 
+- 2. smaller number of updates per time step: instead of updating the actor and critic networks 20 times (for 20 agents) at every timestep, amend the code to update the networks 10 times after every 20 timesteps. 
 
 I have mostly worked with the first version of the environment (one agent) given that the second version is useful for algorithms like PPO, A3C, and D4PG that use multiple (non-interacting, parallel) copies of the same agent to distribute the task of gathering experience. 
 
