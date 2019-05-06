@@ -102,7 +102,7 @@ EPSILON_DECAY = 1e-6    # decay rate for noise process
 ### Results
 
 Using the set-up described above the single Reacher agent was able to achieve the score of at least 30 over the last 100 episodes 
-at the episode 240. The plot showing the learning process is shown below. 
+at the episode 140. The plot showing the learning process is shown below. 
 
 ![alt text](ScoreFinal.png)
 
