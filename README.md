@@ -37,4 +37,4 @@ The environment is considered solved, when the average (over 100 episodes) of th
 
 ## Solution
 
-The problem is solved using the DDGP algorithm. The code is stored in the notebook [Continuous_Control.ipynb](Continuous_Control.ipynb) and the description of the solution is described in the [report.md](report.md) document.
+The problem is solved using the DDPG algorithm. The code is stored in the notebook [Continuous_Control.ipynb](Continuous_Control.ipynb) and the description of the solution is described in the [report.md](report.md) document.
